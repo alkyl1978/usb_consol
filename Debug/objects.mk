@@ -4,5 +4,5 @@
 
 USER_OBJS := /usr/local/lib/libusb-1.0.so
 
-LIBS := -lusb
+LIBS :=
 

@@ -35,7 +35,6 @@ int main(void) {
 	er=libusb_reset_device(handle_usb);
 	er=libusb_get_configuration(handle_usb,&config);
 	device_usb=libusb_get_device(handle_usb);
-	libusb_fill_control_setup();
 	//******************************
 	libusb_attach_kernel_driver(handle_usb, DEV_INTF);
 	libusb_close(handle_usb);
