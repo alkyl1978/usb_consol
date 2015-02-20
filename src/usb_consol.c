@@ -16,6 +16,7 @@ libusb_context *ctx;
 libusb_device_handle *handle_usb;
 libusb_device        *device_usb;
 int config;
+unsigned char buf[8];
 
 #define VID 0x2156
 #define PID 0xc00d
@@ -23,18 +24,25 @@ int config;
 
 int er;
 
-int main(void) {
+int main(void)
+{
+	int count;
 	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 	er=libusb_init(&ctx);
 	// обработчик USB
 	handle_usb=libusb_open_device_with_vid_pid(NULL,VID,PID);
-	 if (handle_usb == NULL) printf("Устройство не подключено\n");
+	 if (handle_usb == NULL)
+	 {
+		 printf("Устройство не подключено\n");
+		 return 1;
+	 }
 	 else printf("Устройство подключено\n");
 	 if (libusb_kernel_driver_active(handle_usb,DEV_INTF)) libusb_detach_kernel_driver(handle_usb, DEV_INTF);
 	 if (libusb_claim_interface(handle_usb,  DEV_INTF) < 0) printf("Ошибка интерфейса\n");
 	er=libusb_reset_device(handle_usb);
 	er=libusb_get_configuration(handle_usb,&config);
 	device_usb=libusb_get_device(handle_usb);
+	libusb_interrupt_transfer(handle_usb,1,buf,4,&count,1000);
 	//******************************
 	libusb_attach_kernel_driver(handle_usb, DEV_INTF);
 	libusb_close(handle_usb);

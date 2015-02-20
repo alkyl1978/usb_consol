@@ -35,7 +35,7 @@ usb_consol: $(OBJS) $(USER_OBJS)
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) usb_consol
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) usb_consol
 	-@echo ' '
 
 .PHONY: all clean dependents
