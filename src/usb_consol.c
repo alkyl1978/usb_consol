@@ -56,13 +56,10 @@ int main(void)
 	 printf("USB >> %X  %X  %X  %X \n",buf[0],buf[1],buf[2],buf[3]);
 	 DecodeData(buf,0);
 	 printf("USB decode >> %X  %X  %X  %X \n",buf[0],buf[1],buf[2],buf[3]);
-	 IncreaseCnt();
-	 memset(buf,0,sizeof(buf));
-	 er=libusb_control_transfer(handle_usb,READ_USB,READ_DATA,0,0,buf,4,1000);
-	 printf("USB >> %X  %X  %X  %X \n",buf[0],buf[1],buf[2],buf[3]);
-	 DecodeData(buf,0);
-	 printf("USB decode >> %X  %X  %X  %X \n",buf[0],buf[1],buf[2],buf[3]);
-	 IncreaseCnt();
+	 rDustDegree=buf[0]+(buf[1]<<8);
+	 rTimeCnt=buf[2]+(buf[3]<<8);
+	 printf("Уровень пыли %i \n",rDustDegree);
+	 printf("Количество сработок %u \n",rTimeCnt);
 	 usb_close(handle_usb);
 
     libusb_exit(ctx);
@@ -152,7 +149,7 @@ void DecodeData(uint8_t *ReadBuffer, uint8_t index)
     	i1++;
     	i7=i6;
     }
-    ul3&=-1;
+    ul3=(ulong)((long)ul3 & (long)-1);
     ul3^=(ulong)Device_ID;
     ReadBuffer[index]=(uint8_t)ul3&0xff;
     ReadBuffer[index+1]=(uint8_t)(ul3>>8)&0xff;
